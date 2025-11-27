@@ -46,13 +46,13 @@ public class EmailGeneratorService {
             throw new IllegalStateException("GEMINI_API_URL and GEMINI_API_KEY must be set as environment variables");
         }
 
-        // 1) Persist the thread + messages
+       
         EmailThread thread = saveThread(emailRequest);
 
-        // 2) Build the prompt
+       
         String prompt = buildPrompt(emailRequest);
 
-        // 3) Call Gemini
+       
         Map<String, Object> requestBody = Map.of(
                 "contents", new Object[]{
                         Map.of("parts", new Object[]{
@@ -71,10 +71,10 @@ public class EmailGeneratorService {
 
         String replyText = extractResponseContent(response);
 
-        // 4) Persist the generated reply
+        
         saveGeneratedReply(thread, emailRequest.getTone(), replyText);
 
-        // 5) Return reply text to the controller
+        
         return replyText;
     }
 
@@ -94,13 +94,13 @@ public class EmailGeneratorService {
         }
     }
 
-    // --- Persist thread + messages ---
+    
 
     private EmailThread saveThread(EmailRequest emailRequest) {
         EmailThread thread = new EmailThread();
         thread.setSubject(emailRequest.getSubject());
 
-        // Save thread first so it gets an ID
+        
         EmailThread savedThread = emailThreadRepository.save(thread);
 
         if (emailRequest.getMessages() != null && !emailRequest.getMessages().isEmpty()) {
@@ -117,7 +117,7 @@ public class EmailGeneratorService {
                 emailMessageRepository.save(message);
             }
         } else {
-            // Legacy single-email fallback
+            
             if (emailRequest.getEmailContent() != null && !emailRequest.getEmailContent().isBlank()) {
                 EmailMessage message = new EmailMessage();
                 message.setThread(savedThread);
@@ -132,24 +132,24 @@ public class EmailGeneratorService {
         return savedThread;
     }
 
-    // --- Persist generated reply ---
+ 
 
     private void saveGeneratedReply(EmailThread thread, String tone, String replyText) {
         GeneratedReply reply = new GeneratedReply();
         reply.setThread(thread);
         reply.setTone(tone);
         reply.setReplyBody(replyText);
-        // createdAt is set in the entity
+      
 
         generatedReplyRepository.save(reply);
     }
 
-    // --- Prompt engineering ---
+  
 
     private String buildPrompt(EmailRequest emailRequest) {
         StringBuilder prompt = new StringBuilder();
 
-        // 1. Tone instruction — make it concrete and helpful
+      
         String tone = emailRequest.getTone();
         String toneInstruction;
 
@@ -183,7 +183,7 @@ public class EmailGeneratorService {
             }
         }
 
-        // 2. Global instructions for the model
+        
         prompt.append("""
                 You are an assistant that drafts polished email replies on behalf of the user.
 
@@ -215,14 +215,14 @@ public class EmailGeneratorService {
                 Your final output must be only the email body the user will send.
                 """).append("\n\n");
 
-        // 3. Subject (if present)
+        
         if (emailRequest.getSubject() != null && !emailRequest.getSubject().isBlank()) {
             prompt.append("Subject of the email thread: ")
                     .append(emailRequest.getSubject())
                     .append("\n\n");
         }
 
-        // 4. Thread vs legacy single email
+        
         if (emailRequest.getMessages() != null && !emailRequest.getMessages().isEmpty()) {
             prompt.append("Email thread (oldest first):\n");
 
@@ -250,7 +250,6 @@ public class EmailGeneratorService {
                     Output only the email body, nothing else.
                     """);
         } else {
-            // Fallback: old single-email behavior
             prompt.append("Original email (single message):\n")
                     .append(emailRequest.getEmailContent() == null ? "" : emailRequest.getEmailContent())
                     .append("\n\n")
