@@ -1,6 +1,4 @@
-<img width="1261" height="430" alt="architecture_diagram" src="https://github.com/user-attachments/assets/bdd87a60-e305-4caf-81bb-e58a9bb8ef89" /># ReplyCraft – Context-Aware AI Email Reply Assistant
-
-**ReplyCraft** is an end-to-end AI assistant built for the **CIMBA Winter Internship Program 2026 – Problem 8**.  
+# **ReplyCraft** is an end-to-end AI assistant built for the **CIMBA Winter Internship Program 2026 – Problem 8**.  
 It reads entire email threads and generates a smart, context-aware, tonally controlled reply using the **Gemini LLM**.
 
 This project includes both a **full-stack web application** and a **Chrome extension** that integrates directly into Gmail.
