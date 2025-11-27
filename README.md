@@ -1,7 +1,9 @@
 # **ReplyCraft** is an end-to-end AI assistant built for replying to Email threads.  
 It reads entire email threads and generates a smart, context-aware, tonally controlled reply using the **Gemini LLM**.
+
 **CIMBA Winter Internship Program 2026 – Problem 8**
-This project includes both a **full-stack web application** and a **Chrome extension** that integrates directly into Gmail.
+
+## This project includes both a **full-stack web application** and a **Chrome extension** that integrates directly into Gmail.
 
 ---
 
