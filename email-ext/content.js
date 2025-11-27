@@ -3,7 +3,7 @@ console.log("ReplyCraft Gmail Extension - Content Script Loaded");
 let replyCraftPanel = null;
 let selectedTone = "formal";
 
-// Create the "AI Reply" button styled like a Gmail button
+
 function createAIButton() {
   const button = document.createElement("div");
   button.className = "T-I J-J5-Ji aoO v7 T-I-atl L3 ai-reply-button";
@@ -14,7 +14,7 @@ function createAIButton() {
   return button;
 }
 
-// Try to get the email subject from Gmail DOM
+
 function getEmailSubject() {
   const subjectEl = document.querySelector("h2.hP");
   if (subjectEl && subjectEl.innerText) {
@@ -23,7 +23,7 @@ function getEmailSubject() {
   return "";
 }
 
-// Extract the *latest* visible message as a single-message "thread"
+
 function getLatestMessageAsDto() {
   const bodyCandidates = document.querySelectorAll(".a3s.aiL");
 
@@ -50,7 +50,7 @@ function getLatestMessageAsDto() {
   };
 }
 
-// Fallback: single email content if we ever need it
+
 function getEmailContentFallback() {
   const selectors = [
     ".a3s.aiL",
@@ -68,7 +68,7 @@ function getEmailContentFallback() {
   return "";
 }
 
-// Find the compose/reply toolbar in Gmail UI
+
 function findComposeToolbar() {
   const selectors = [".btC", ".aDh", "[role='toolbar']", ".gU.Up"];
   for (const selector of selectors) {
@@ -80,7 +80,7 @@ function findComposeToolbar() {
   return null;
 }
 
-// Create the floating ReplyCraft panel (tone selector + preview + buttons)
+
 function createReplyCraftPanel() {
   if (replyCraftPanel) return replyCraftPanel;
 
@@ -110,7 +110,7 @@ function createReplyCraftPanel() {
   document.body.appendChild(panel);
   replyCraftPanel = panel;
 
-  // Wire up events
+  
   const closeBtn = panel.querySelector(".replycraft-close-btn");
   const toneButtons = panel.querySelectorAll(".replycraft-tone-btn");
   const generateBtn = panel.querySelector(".replycraft-generate-btn");
@@ -139,7 +139,7 @@ function showReplyCraftPanel() {
   panel.style.display = "flex";
 }
 
-// Handle "Generate reply" button in the panel
+
 async function handleGenerateClick() {
   if (!replyCraftPanel) return;
 
@@ -196,7 +196,7 @@ async function handleGenerateClick() {
   }
 }
 
-// Handle "Insert into reply" button in the panel
+
 function handleInsertClick() {
   if (!replyCraftPanel) return;
 
@@ -222,11 +222,11 @@ function handleInsertClick() {
   document.execCommand("insertText", false, text);
 }
 
-// Inject the AI Reply button into Gmail's toolbar
+
 function injectButton() {
   const existingButton = document.querySelector(".ai-reply-button");
   if (existingButton) {
-    return; // already injected
+    return; 
   }
 
   const toolbar = findComposeToolbar();
@@ -238,7 +238,7 @@ function injectButton() {
   console.log("Toolbar found, injecting AI Reply button");
   const button = createAIButton();
 
-  // Instead of generating directly, show the panel
+  
   button.addEventListener("click", () => {
     showReplyCraftPanel();
   });
@@ -246,7 +246,7 @@ function injectButton() {
   toolbar.insertBefore(button, toolbar.firstChild);
 }
 
-// Observe DOM changes to detect when a reply/compose box appears
+
 const observer = new MutationObserver((mutations) => {
   for (const mutation of mutations) {
     const addedNodes = Array.from(mutation.addedNodes);
@@ -270,5 +270,4 @@ observer.observe(document.body, {
   subtree: true,
 });
 
-// Also try once on initial load (in case compose is already open)
 setTimeout(injectButton, 2000);
