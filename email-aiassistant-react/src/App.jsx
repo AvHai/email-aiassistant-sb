@@ -32,7 +32,7 @@ import {
 } from '@mui/icons-material';
 import axios from 'axios';
 
-// Note: In a real environment, you would use environment variables for this API URL.
+
 const API_URL = 'http://localhost:8080/api/email/generate';
 
 function App() {
@@ -45,7 +45,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [mode, setMode] = useState('dark');
-  const [copied, setCopied] = useState(false); // New state for copy confirmation
+  const [copied, setCopied] = useState(false); 
 
   const theme = useMemo(
     () =>
@@ -58,20 +58,20 @@ function App() {
         },
         palette: {
           mode,
-          // --- UPDATED COLOR SCHEME: Orange & Violet ---
+          
           primary: {
-            main: '#F97316', // Vibrant Orange
+            main: '#F97316',
           },
           secondary: {
-            main: '#6D28D9', // Deep Violet
+            main: '#6D28D9', 
           },
           background: {
-            // Dark purple-black
-            default: mode === 'dark' ? '#0F0A1F' : '#FFFBEB', // Light cream/yellow (replaces light grey)
-            // Dark purple-indigo for paper
+            
+            default: mode === 'dark' ? '#0F0A1F' : '#FFFBEB', 
+            
             paper: mode === 'dark' ? '#1A112E' : '#FFFFFF', 
           },
-          // Explicitly define divider color to avoid grey, using transparent primary/secondary tones
+          
           divider: mode === 'dark' ? 'rgba(109, 40, 217, 0.4)' : 'rgba(249, 115, 22, 0.3)',
         },
         shape: {
@@ -102,7 +102,7 @@ function App() {
           MuiOutlinedInput: {
             styleOverrides: {
               root: {
-                // Ensuring text fields are not grey in dark mode
+                
                 backgroundColor: mode === 'dark' ? 'rgba(0, 0, 0, 0.25)' : 'transparent', 
               }
             }
@@ -128,7 +128,7 @@ function App() {
 
   const handleCopy = () => {
     if (generatedReply) {
-      // Using navigator.clipboard for standard modern environments
+    
       navigator.clipboard.writeText(generatedReply)
         .then(() => {
           setCopied(true);
@@ -136,7 +136,7 @@ function App() {
         })
         .catch((err) => {
           console.error('Failed to copy text: ', err);
-          // Fallback UI indication if copy fails
+      
           setError('Failed to copy to clipboard. Please copy manually.');
         });
     }
@@ -151,7 +151,7 @@ function App() {
         subject,
         tone,
         messages: messages.map((m, index) => ({
-          // Added position for backend processing
+         
           positionInThread: index,
           sender: m.sender,
           recipient: m.recipient || null,
@@ -160,11 +160,10 @@ function App() {
       };
 
       const response = await axios.post(
-        API_URL, // Updated to use constant
+        API_URL, 
         payload
       );
 
-      // Handle both string and object responses from the backend
       const data =
         typeof response.data === 'string'
           ? response.data
@@ -196,7 +195,6 @@ function App() {
           color: 'text.primary',
         }}
       >
-        {/* Top AppBar with blurred background for a modern effect */}
         <AppBar
           position="sticky"
           color="transparent"
@@ -207,8 +205,8 @@ function App() {
             backdropFilter: 'blur(10px)',
             backgroundColor: (theme) =>
               theme.palette.mode === 'dark'
-                ? 'rgba(15, 10, 31, 0.85)' // Using new dark background
-                : 'rgba(255, 251, 235, 0.85)', // Using new light background
+                ? 'rgba(15, 10, 31, 0.85)' 
+                : 'rgba(255, 251, 235, 0.85)', 
           }}
         >
           <Container maxWidth="lg">
@@ -232,7 +230,6 @@ function App() {
         </AppBar>
 
         <Container maxWidth="lg" sx={{ py: 4 }}>
-          {/* Main Title/Description */}
           <Box
             sx={{
               mb: 5,
@@ -254,7 +251,7 @@ function App() {
               gap: 4,
             }}
           >
-            {/* LEFT: Input & Configuration Panel */}
+            
             <Paper elevation={4} sx={{ p: 4 }}>
               <Typography variant="h5" gutterBottom sx={{ fontWeight: 700, color: 'primary.main' }}>
                 1. Context & Configuration
@@ -278,7 +275,7 @@ function App() {
                       variant="outlined"
                       sx={{
                         p: 2,
-                        // Using the divider for the border color
+                    
                         borderColor: (theme) => theme.palette.divider, 
                         borderStyle: 'solid',
                         transition: 'border-color 0.3s',
@@ -381,7 +378,7 @@ function App() {
               </Stack>
             </Paper>
 
-            {/* RIGHT: Output Panel */}
+        
             <Paper elevation={4} sx={{ p: 4, display: 'flex', flexDirection: 'column' }}>
               <Box
                 sx={{
@@ -411,7 +408,6 @@ function App() {
                   flexGrow: 1,
                   minHeight: '400px',
                   p: 2,
-                  // Using the divider for the border color
                   border: (theme) => `1px solid ${theme.palette.divider}`,
                   borderRadius: 2,
                   bgcolor: (theme) => theme.palette.background.paper, 
@@ -436,7 +432,6 @@ function App() {
                 )}
               </Box>
               
-              {/* Optional: Add instructions or next steps here */}
               <Typography variant="caption" color="text.secondary" sx={{ mt: 2, textAlign: 'center' }}>
                 Review and edit the reply before sending. Click the copy icon to use it.
               </Typography>
